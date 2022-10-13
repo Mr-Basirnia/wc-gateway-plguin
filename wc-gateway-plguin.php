@@ -58,8 +58,9 @@ if (
 			}
 
 			// start payment
-			public function start_payment( $order ) {
-
+			public function start_payment( $order_id ) {
+				$order    = new WC_Order( $order_id );
+				$callback = add_query_arg( 'wc-api', get_class( $this ), get_home_url( '/' ) );
 			}
 		}
 

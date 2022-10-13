@@ -17,6 +17,30 @@ if (
 ) {
 	add_action( 'plugins_loaded', function () {
 		class Woo_Gateway extends WC_Payment_Gateway {
+			public function __construct() {
+				$this->id                 = 'woo_gateway';
+				$this->method_title       = 'درگاه پرداخت تستی';
+				$this->icon               = null;
+				$this->has_fields         = false;
+				$this->method_description = 'توضیحات درگاه';
+				$this->init_form_fields();
+			}
+
+			public function init_form_fields() {
+				$this->form_fields = array(
+					'enabled'  => array(
+						'title'   => 'فعال / غیرفعال',
+						'type'    => 'checkbox',
+						'label'   => 'فعال بودن درگاه پرداخت',
+						'default' => 'no'
+					),
+					'merchant' => array(
+						'title'       => 'Api درگاه پرداخت',
+						'type'        => 'text',
+						'description' => 'برای فعال سازی درگاه پرداخت، API رو وارد کنید'
+					)
+				);
+			}
 		}
 
 		add_filter( 'woocommerce_payment_gateways', function ( array $methods ) {

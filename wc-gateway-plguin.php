@@ -20,6 +20,8 @@ if (
 			public function __construct() {
 				$this->id                 = 'woo_gateway';
 				$this->method_title       = 'درگاه پرداخت تستی';
+				$this->title              = 'درگاه پرداخت ووکامرس پرداخت';
+				$this->description        = 'این یک درگاه تستی است';
 				$this->icon               = null;
 				$this->has_fields         = false;
 				$this->method_description = 'توضیحات درگاه';

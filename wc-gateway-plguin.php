@@ -30,6 +30,7 @@ if (
 					'process_admin_options'
 				) );
 				add_action( "woocommerce_receipt_{$this->id}", array( $this, 'start_payment' ) );
+				add_action( 'woocommerce_api_' . strtolower( get_class( $this ) ), array( $this, 'verify_payment' ) );
 			}
 
 			public function init_form_fields() {
@@ -58,8 +59,24 @@ if (
 			}
 
 			// start payment
-			public function start_payment( $order ) {
+			public function start_payment( $order_id ) {
+				global $woocommerce;
+				$woocommerce->session->order_id = $order_id;
 
+				$order    = new WC_Order( $order_id );
+				$callback = add_query_arg( 'wc-api', get_class( $this ), get_home_url( '/' ) );
+			}
+
+			public function verify_payment() {
+				global $woocommerce;
+				$order_id = $woocommerce->session->order_id;
+
+				$order = new WC_Order( $order_id );
+				$order->add_order_note( 'پرداخت با موفقیت انجام شد.' );
+				$order->add_order_note( 'مشکلی در پرداخت رخ داده است.' );
+				$order->payment_complete();
+
+				$woocommerce->cart->emty_cart();
 			}
 		}
 

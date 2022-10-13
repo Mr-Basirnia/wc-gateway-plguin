@@ -29,6 +29,7 @@ if (
 					$this,
 					'process_admin_options'
 				) );
+				add_action( "woocommerce_receipt_{$this->id}", array( $this, 'start_payment' ) );
 			}
 
 			public function init_form_fields() {
@@ -45,6 +46,20 @@ if (
 						'description' => 'برای فعال سازی درگاه پرداخت، API رو وارد کنید'
 					)
 				);
+			}
+
+			public function process_payment( $order_id ): array {
+				$order = new WC_Order( $order_id );
+
+				return array(
+					'result'   => 'success',
+					'redirect' => $order->get_checkout_payment_url( true )
+				);
+			}
+
+			// start payment
+			public function start_payment( $order ) {
+
 			}
 		}
 

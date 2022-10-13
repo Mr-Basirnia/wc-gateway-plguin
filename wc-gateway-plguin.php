@@ -24,6 +24,11 @@ if (
 				$this->has_fields         = false;
 				$this->method_description = 'توضیحات درگاه';
 				$this->init_form_fields();
+				$this->init_settings();
+				add_action( "woocommerce_update_options_payment_gateways_{$this->id}", array(
+					$this,
+					'process_admin_options'
+				) );
 			}
 
 			public function init_form_fields() {

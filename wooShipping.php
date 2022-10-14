@@ -16,6 +16,7 @@ class Woo_Shipping extends WC_Shipping_Method {
 
 		$this->init_form_fields();
 		$this->init_settings();
+		$this->weight = $this->settings['weight'];
 
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 	}
@@ -32,11 +33,35 @@ class Woo_Shipping extends WC_Shipping_Method {
 				'type'    => 'checkbox',
 				'default' => 'no'
 			),
-			'amount'  => array(
-				'title' => 'حداکثر قیمت سفارش',
+			'weight'  => array(
+				'title' => 'حداکثر وزن سفارش',
 				'type'  => 'number'
 			)
 		);
+	}
+
+	/**
+	 * Shipping add rate
+	 *
+	 * @param $package
+	 *
+	 * @return void
+	 */
+	public function calculate_shipping( $package = array() ): void {
+		$weight = 0;
+
+		foreach ( $package['contents'] as $data ) {
+			$product = $data['data'];
+			$weight  += $product->get_weight() * $data['quantity'];
+		}
+
+		$weight = wc_get_weight( $weight, 'kg' );
+
+		$this->add_rate( array(
+			'id'    => $this->id,
+			'label' => $this->title,
+			'cost'  => $weight <= $this->weight ? 0 : 20000
+		) );
 	}
 }
 

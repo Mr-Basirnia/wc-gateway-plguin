@@ -52,7 +52,7 @@ class Woo_Shipping extends WC_Shipping_Method {
 
 		foreach ( $package['contents'] as $data ) {
 			$product = $data['data'];
-			$weight  += $product->get_weight() * $data['quantity'];
+			$weight  += intval( $product->get_weight() ) * $data['quantity'];
 		}
 
 		$weight = wc_get_weight( $weight, 'kg' );
